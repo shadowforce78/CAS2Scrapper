@@ -134,5 +134,5 @@ def main():
     except json.JSONDecodeError:
         print("Error: Invalid JSON format in data.json")
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

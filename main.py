@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
+from data_json import main
 
 
 class BulletinClient:
@@ -54,3 +55,5 @@ data = client.fetch_datas()
 # Mettre les data dans un fichier json
 with open("data.json", "w") as f:
     json.dump(data, f, indent=4)
+
+main()
