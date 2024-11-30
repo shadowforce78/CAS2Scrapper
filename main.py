@@ -46,5 +46,5 @@ client.login()
 data = client.fetch_datas()
 # Mettre les data dans un fichier json
 with open("data.json", "w") as f:
-    json.dump(data, f)
+    json.dump(data, f, indent=4)
     
