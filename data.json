@@ -54,7 +54,7 @@
     "relev\u00e9": {
         "version": "0",
         "type": "BUT",
-        "date": "2024-11-30T01:47:37.262833+01:00",
+        "date": "2024-11-30T19:32:13.290478+01:00",
         "publie": true,
         "etat_inscription": "I",
         "etudiant": {
@@ -448,9 +448,9 @@
                         "evaluation_type": 0,
                         "note": {
                             "value": "~",
-                            "min": "06.67",
+                            "min": "05.33",
                             "max": "20.00",
-                            "moy": "13.96"
+                            "moy": "13.59"
                         },
                         "poids": {
                             "UE1.1": 1,
@@ -582,8 +582,8 @@
                         "id": 1154,
                         "bul_show_rank": false,
                         "groups_editable": true,
-                        "partition_name": "TD",
                         "formsemestre_id": 507,
+                        "partition_name": "TD",
                         "numero": 0,
                         "show_in_lists": true,
                         "partition_id": 1154
@@ -634,8 +634,8 @@
                     "value": "11.00",
                     "min": "00.00",
                     "max": "16.33",
-                    "moy": "09.84",
-                    "rang": "28",
+                    "moy": "10.09",
+                    "rang": "30 ex",
                     "total": 75,
                     "groupes": {}
                 },
@@ -731,9 +731,9 @@
                 "moyenne": {
                     "value": "13.06",
                     "min": "02.71",
-                    "max": "18.32",
-                    "moy": "13.69",
-                    "rang": "53",
+                    "max": "18.60",
+                    "moy": "13.58",
+                    "rang": "51",
                     "total": 75,
                     "groupes": {}
                 },
@@ -868,9 +868,9 @@
                 "moyenne": {
                     "value": "08.42",
                     "min": "01.34",
-                    "max": "17.54",
-                    "moy": "10.64",
-                    "rang": "55",
+                    "max": "18.22",
+                    "moy": "10.82",
+                    "rang": "57",
                     "total": 75,
                     "groupes": {}
                 },
