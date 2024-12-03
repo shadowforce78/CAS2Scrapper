@@ -106,6 +106,36 @@ class ModernNotesApp(QWidget):
 
                 ue_layout.addLayout(res_layout)
 
+            # SAEs
+            saes = details.get("saes", {})
+            for sae, sae_details in saes.items():
+                sae_layout = QHBoxLayout()
+
+                sae_name = QLabel(sae)
+                sae_name.setStyleSheet(
+                    """
+                    color: #34495e;
+                    font-size: 14px;
+                """
+                )
+
+                sae_note = str(sae_details.get("moyenne", "~"))
+
+                sae_note_label = QLabel(sae_note)
+                sae_note_label.setStyleSheet(
+                    """
+                    color: #e74c3c;
+                    font-size: 16px;
+                    font-weight: bold;
+                """
+                )
+
+                sae_layout.addWidget(sae_name)
+                sae_layout.addStretch()
+                sae_layout.addWidget(sae_note_label)
+
+                ue_layout.addLayout(sae_layout)
+
             scroll_layout.addWidget(ue_frame)
 
         # Finalize scroll area
