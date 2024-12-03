@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
+from dotenv import load_dotenv
 from data_json import main
 
 
@@ -45,11 +46,12 @@ class BulletinClient:
         json_data = response.text.replace("\n", "")
         return json.loads(json_data)
 
-
-username = "22401313"
+load_dotenv()
+username = os.getenv("IDETUDIANT") 
 password = os.getenv("PASSWORD")
 
 client = BulletinClient(username=username, password=password)
+print("Logging in as", username)
 client.login()
 data = client.fetch_datas()
 # Mettre les data dans un fichier json
