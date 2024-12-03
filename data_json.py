@@ -22,7 +22,7 @@ class ModernNotesApp(QWidget):
     def initUI(self):
         # Set up main window
         self.setWindowTitle("Student Notes")
-        self.setGeometry(100, 100, 600, 700)
+        self.setGeometry(100, 100, 500, 700)
 
         # Main layout
         main_layout = QVBoxLayout()
