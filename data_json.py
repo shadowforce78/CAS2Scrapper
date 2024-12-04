@@ -186,7 +186,3 @@ def main():
         print("Error: data.json file not found.")
     except json.JSONDecodeError:
         print("Error: Invalid JSON format in data.json")
-
-
-# if __name__ == "__main__":
-#     main()
