@@ -81,7 +81,7 @@ class ModernNotesApp(QWidget):
             for resource, res_details in resources.items():
                 res_layout = QHBoxLayout()
 
-                res_name = QLabel(resource)
+                res_name = QLabel(f"{resource} - {res_details.get('titre', 'No title')}")
                 res_name.setStyleSheet(
                     """
                     color: #34495e;
