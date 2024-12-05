@@ -22,10 +22,11 @@ class ModernNotesApp(QWidget):
     def initUI(self):
         # Set up main window
         self.setWindowTitle("Student Notes")
-        self.setGeometry(100, 100, 700, 700)
+        self.setGeometry(100, 100, 800, 700)  # Increased width to 800
 
         # Main layout
         main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(10, 10, 10, 10)  # Adjusted margins
 
         # Title
         title_label = QLabel("Bulletin UVSQ")
@@ -46,7 +47,7 @@ class ModernNotesApp(QWidget):
         scroll_content = QWidget()
         scroll_layout = QVBoxLayout(scroll_content)
         scroll_layout.setSpacing(10)
-        scroll_layout.setContentsMargins(20, 20, 20, 20)
+        scroll_layout.setContentsMargins(10, 10, 10, 10)  # Adjusted margins
 
         # Populate notes
         for ue, details in self.notes.items():
@@ -58,6 +59,7 @@ class ModernNotesApp(QWidget):
                     border-radius: 10px;
                     padding: 15px;
                     margin-bottom: 10px;
+                    max-width: 760px;
                 }
             """
             )
