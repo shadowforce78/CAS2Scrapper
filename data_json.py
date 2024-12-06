@@ -8,10 +8,127 @@ from PyQt5.QtWidgets import (
     QScrollArea,
     QFrame,
     QHBoxLayout,
+    QMenuBar,
+    QStackedWidget,
+    QMainWindow,
 )
 from PyQt5.QtGui import QFont, QPalette, QColor
 from PyQt5.QtCore import Qt
 
+class MainWindow(QMainWindow):
+    def __init__(self, data):
+        super().__init__()
+        self.data = data
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("Student Information")
+        self.setMinimumWidth(900)
+
+        # Create menu bar
+        menubar = self.menuBar()
+        view_menu = menubar.addMenu('View')
+        
+        # Create actions
+        notes_action = view_menu.addAction('Notes')
+        notes_action.triggered.connect(lambda: self.stack.setCurrentIndex(0))
+        
+        info_action = view_menu.addAction('Info')
+        info_action.triggered.connect(lambda: self.stack.setCurrentIndex(1))
+        
+        absences_action = view_menu.addAction('Absences')
+        absences_action.triggered.connect(lambda: self.stack.setCurrentIndex(2))
+
+        # Create central widget and layout
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        layout = QVBoxLayout(central_widget)
+
+        # Create stacked widget
+        self.stack = QStackedWidget()
+        layout.addWidget(self.stack)
+
+        # Add pages to stack
+        self.stack.addWidget(ModernNotesApp(self.data.get("relevé", {}).get("ues", {})))
+        self.stack.addWidget(InfoWidget(self.data.get("auth", {})))
+        self.stack.addWidget(AbsencesWidget(self.data.get("absences", {})))
+
+class InfoWidget(QWidget):
+    def __init__(self, info_data):
+        super().__init__()
+        layout = QVBoxLayout(self)
+        
+        info_frame = QFrame()
+        info_frame.setStyleSheet("""
+            QFrame {
+                background-color: #ecf0f1;
+                border-radius: 10px;
+                padding: 15px;
+            }
+        """)
+        
+        info_layout = QVBoxLayout(info_frame)
+        
+        for key, value in info_data.items():
+            row = QHBoxLayout()
+            key_label = QLabel(f"{key}:")
+            key_label.setStyleSheet("font-weight: bold; color: #2c3e50;")
+            value_label = QLabel(str(value))
+            value_label.setStyleSheet("color: #34495e;")
+            
+            row.addWidget(key_label)
+            row.addWidget(value_label)
+            row.addStretch()
+            
+            info_layout.addLayout(row)
+        
+        layout.addWidget(info_frame)
+        layout.addStretch()
+
+class AbsencesWidget(QWidget):
+    def __init__(self, absences_data):
+        super().__init__()
+        layout = QVBoxLayout(self)
+        
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        content = QWidget()
+        scroll_layout = QVBoxLayout(content)
+
+        # Sort dates
+        sorted_dates = sorted(absences_data.keys())
+        
+        for date in sorted_dates:
+            date_frame = QFrame()
+            date_frame.setStyleSheet("""
+                QFrame {
+                    background-color: #ecf0f1;
+                    border-radius: 10px;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                }
+            """)
+            
+            date_layout = QVBoxLayout(date_frame)
+            
+            date_label = QLabel(date)
+            date_label.setStyleSheet("font-weight: bold; color: #2c3e50;")
+            date_layout.addWidget(date_label)
+            
+            for absence in absences_data[date]:
+                absence_info = QLabel(
+                    f"De {absence['debut']}h à {absence['fin']}h - "
+                    f"Status: {absence['statut']} - "
+                    f"Justifié: {'Oui' if absence['justifie'] else 'Non'}"
+                )
+                absence_info.setStyleSheet("color: #34495e;")
+                date_layout.addWidget(absence_info)
+            
+            scroll_layout.addWidget(date_frame)
+        
+        scroll_layout.addStretch()
+        scroll.setWidget(content)
+        layout.addWidget(scroll)
 
 class ModernNotesApp(QWidget):
     def __init__(self, notes):
@@ -176,43 +293,22 @@ class ModernNotesApp(QWidget):
         """
         )
 
-
 def read_notes(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
-        data = json.load(file)
-        releve = data.get("relevé", {})
-        notes = releve.get("ues", {})
-        ressources = releve.get("ressources", {})
-        saes = releve.get("saes", {})
-
-        # Créer un dictionnaire de correspondance pour les titres
-        ressources_titres = {code: res["titre"] for code, res in ressources.items()}
-        saes_titres = {code: sae["titre"] for code, sae in saes.items()}
-
-        # Mettre à jour les titres dans les UEs
-        for ue in notes.values():
-            # Mise à jour des titres des ressources
-            for code in ue.get("ressources", {}):
-                if code in ressources_titres:
-                    ue["ressources"][code]["titre"] = ressources_titres[code]
-
-            # Mise à jour des titres des SAEs
-            for code in ue.get("saes", {}):
-                if code in saes_titres:
-                    ue["saes"][code]["titre"] = saes_titres[code]
-
-        return notes
-
+        return json.load(file)
 
 def main():
     app = QApplication(sys.argv)
 
     try:
-        notes = read_notes("data.json")
-        window = ModernNotesApp(notes)
+        data = read_notes("data.json")
+        window = MainWindow(data)
         window.show()
         sys.exit(app.exec_())
     except FileNotFoundError:
         print("Error: data.json file not found.")
     except json.JSONDecodeError:
         print("Error: Invalid JSON format in data.json")
+
+if __name__ == "__main__":
+    main()
