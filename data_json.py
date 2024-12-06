@@ -313,11 +313,11 @@ def read_notes(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return json.load(file)
 
-def main():
+def main(data):
     app = QApplication(sys.argv)
 
     try:
-        data = read_notes("data.json")
+        # data = read_notes("data.json")
         window = MainWindow(data)
         window.show()
         sys.exit(app.exec_())
