@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.stack)
 
         # Add pages to stack
-        self.stack.addWidget(ModernNotesApp(self.data.get("relevé", {}).get("ues", {})))
+        self.stack.addWidget(ModernNotesApp(self.data))  # Passer tout le dictionnaire data
         self.stack.addWidget(InfoWidget(self.data.get("auth", {})))
         self.stack.addWidget(AbsencesWidget(self.data.get("absences", {})))
 
@@ -133,7 +133,9 @@ class AbsencesWidget(QWidget):
 class ModernNotesApp(QWidget):
     def __init__(self, notes):
         super().__init__()
-        self.notes = notes
+        self.data = notes
+        self.ressources = self.data.get("relevé", {}).get("ressources", {})
+        self.notes = self.data.get("relevé", {}).get("ues", {})
         self.initUI()
 
     def initUI(self):
@@ -177,7 +179,7 @@ class ModernNotesApp(QWidget):
                     padding: 15px;
                     margin-bottom: 10px;
                 }
-            """
+                """
             )
 
             ue_layout = QVBoxLayout(ue_frame)
@@ -198,15 +200,15 @@ class ModernNotesApp(QWidget):
 
             # Resources
             resources = details.get("ressources", {})
-            for resource, res_details in resources.items():
+            for resource_id, res_details in resources.items():
                 res_layout = QHBoxLayout()
                 res_layout.setSpacing(15)
                 
-                titre = res_details.get("titre", "No title")
-                res_name = QLabel(f"{resource} - {titre}")
+                # Récupérer les détails de la ressource depuis le bon dictionnaire
+                resource_info = self.ressources.get(resource_id, {})
+                titre = resource_info.get("titre", "Sans titre")
+                res_name = QLabel(f"{resource_id} - {titre}")
                 res_name.setWordWrap(True)
-                res_name.setMinimumWidth(200)
-                res_name.setMaximumWidth(600)
                 res_name.setStyleSheet(
                     """
                     color: #34495e;
@@ -309,6 +311,3 @@ def main():
         print("Error: data.json file not found.")
     except json.JSONDecodeError:
         print("Error: Invalid JSON format in data.json")
-
-if __name__ == "__main__":
-    main()
