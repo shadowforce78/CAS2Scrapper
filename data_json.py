@@ -82,8 +82,9 @@ class ModernNotesApp(QWidget):
             resources = details.get("ressources", {})
             for resource, res_details in resources.items():
                 res_layout = QHBoxLayout()
-
-                res_name = QLabel(f"{resource} - {res_details.get('titre', 'No title')}")
+                
+                titre = res_details.get("titre", "No title")
+                res_name = QLabel(f"{resource} - {titre}")
                 res_name.setStyleSheet(
                     """
                     color: #34495e;
@@ -112,8 +113,9 @@ class ModernNotesApp(QWidget):
             saes = details.get("saes", {})
             for sae, sae_details in saes.items():
                 sae_layout = QHBoxLayout()
-
-                sae_name = QLabel(sae)
+                
+                titre = sae_details.get("titre", "No title")
+                sae_name = QLabel(f"{sae} - {titre}")
                 sae_name.setStyleSheet(
                     """
                     color: #34495e;
@@ -171,8 +173,27 @@ class ModernNotesApp(QWidget):
 def read_notes(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         data = json.load(file)
+        releve = data.get("relevé", {})
+        notes = releve.get("ues", {})
+        ressources = releve.get("ressources", {})
+        saes = releve.get("saes", {})
 
-        notes = data.get("relevé", {}).get("ues", {})
+        # Créer un dictionnaire de correspondance pour les titres
+        ressources_titres = {code: res["titre"] for code, res in ressources.items()}
+        saes_titres = {code: sae["titre"] for code, sae in saes.items()}
+
+        # Mettre à jour les titres dans les UEs
+        for ue in notes.values():
+            # Mise à jour des titres des ressources
+            for code in ue.get("ressources", {}):
+                if code in ressources_titres:
+                    ue["ressources"][code]["titre"] = ressources_titres[code]
+
+            # Mise à jour des titres des SAEs
+            for code in ue.get("saes", {}):
+                if code in saes_titres:
+                    ue["saes"][code]["titre"] = saes_titres[code]
+
         return notes
 
 
