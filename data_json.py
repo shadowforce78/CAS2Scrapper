@@ -99,32 +99,43 @@ class AbsencesWidget(QWidget):
         sorted_dates = sorted(absences_data.keys())
         
         for date in sorted_dates:
-            date_frame = QFrame()
-            date_frame.setStyleSheet("""
-                QFrame {
-                    background-color: #ecf0f1;
-                    border-radius: 10px;
-                    padding: 15px;
-                    margin-bottom: 10px;
-                }
-            """)
+            # Filtrer les absences pour ne garder que les absences et retards
+            relevant_absences = [
+                absence for absence in absences_data[date] 
+                if absence['statut'] in ['absent', 'retard']
+            ]
             
-            date_layout = QVBoxLayout(date_frame)
-            
-            date_label = QLabel(date)
-            date_label.setStyleSheet("font-weight: bold; color: #2c3e50;")
-            date_layout.addWidget(date_label)
-            
-            for absence in absences_data[date]:
-                absence_info = QLabel(
-                    f"De {absence['debut']}h à {absence['fin']}h - "
-                    f"Status: {absence['statut']} - "
-                    f"Justifié: {'Oui' if absence['justifie'] else 'Non'}"
-                )
-                absence_info.setStyleSheet("color: #34495e;")
-                date_layout.addWidget(absence_info)
-            
-            scroll_layout.addWidget(date_frame)
+            # Ne créer le cadre que s'il y a des absences pertinentes
+            if relevant_absences:
+                date_frame = QFrame()
+                date_frame.setStyleSheet("""
+                    QFrame {
+                        background-color: #ecf0f1;
+                        border-radius: 10px;
+                        padding: 15px;
+                        margin-bottom: 10px;
+                    }
+                """)
+                
+                date_layout = QVBoxLayout(date_frame)
+                
+                date_label = QLabel(date)
+                date_label.setStyleSheet("font-weight: bold; color: #2c3e50;")
+                date_layout.addWidget(date_label)
+                
+                for absence in relevant_absences:
+                    absence_info = QLabel(
+                        f"De {absence['debut']}h à {absence['fin']}h - "
+                        f"Status: {absence['statut']} - "
+                        f"Justifié: {'Oui' if absence['justifie'] else 'Non'}"
+                        f"Enseignant: {absence['enseignant']}"
+                    )
+                    # Colorer en rouge pour absent, orange pour retard
+                    color = "#e74c3c" if absence['statut'] == 'absent' else "#f39c12"
+                    absence_info.setStyleSheet(f"color: {color};")
+                    date_layout.addWidget(absence_info)
+                
+                scroll_layout.addWidget(date_frame)
         
         scroll_layout.addStretch()
         scroll.setWidget(content)
