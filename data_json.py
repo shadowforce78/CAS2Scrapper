@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import (
     QScrollArea,
     QFrame,
     QHBoxLayout,
-    QMenuBar,
     QStackedWidget,
     QMainWindow,
 )
