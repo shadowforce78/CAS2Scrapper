@@ -55,8 +55,8 @@ client = BulletinClient(username=username, password=password)
 client.login()
 data = client.fetch_datas()
 # Mettre les data dans un fichier json
-# with open("data.json", "w") as f:
-#     json.dump(data, f, indent=4)
+with open("data.json", "w") as f:
+    json.dump(data, f, indent=4)
 
 # Update the main function call to use ues instead of ressources
 main(data)
