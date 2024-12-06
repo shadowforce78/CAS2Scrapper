@@ -22,11 +22,11 @@ class ModernNotesApp(QWidget):
     def initUI(self):
         # Set up main window
         self.setWindowTitle("Student Notes")
-        self.setGeometry(100, 100, 800, 700)  # Increased width to 800
+        self.setMinimumWidth(900)  # Augmentation de la largeur minimale
 
         # Main layout
         main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(10, 10, 10, 10)  # Adjusted margins
+        main_layout.setContentsMargins(20, 20, 20, 20)  # Adjusted margins
 
         # Title
         title_label = QLabel("Bulletin UVSQ")
@@ -59,15 +59,16 @@ class ModernNotesApp(QWidget):
                     border-radius: 10px;
                     padding: 15px;
                     margin-bottom: 10px;
-                    max-width: 760px;
                 }
             """
             )
 
             ue_layout = QVBoxLayout(ue_frame)
+            ue_layout.setSpacing(8)
 
             # UE title
             ue_title = QLabel(details.get("titre", "No title"))
+            ue_title.setWordWrap(True)
             ue_title.setStyleSheet(
                 """
                 font-size: 18px;
@@ -82,9 +83,13 @@ class ModernNotesApp(QWidget):
             resources = details.get("ressources", {})
             for resource, res_details in resources.items():
                 res_layout = QHBoxLayout()
+                res_layout.setSpacing(15)
                 
                 titre = res_details.get("titre", "No title")
                 res_name = QLabel(f"{resource} - {titre}")
+                res_name.setWordWrap(True)
+                res_name.setMinimumWidth(200)
+                res_name.setMaximumWidth(600)
                 res_name.setStyleSheet(
                     """
                     color: #34495e;
@@ -103,9 +108,8 @@ class ModernNotesApp(QWidget):
                 """
                 )
 
-                res_layout.addWidget(res_name)
-                res_layout.addStretch()
-                res_layout.addWidget(note_label)
+                res_layout.addWidget(res_name, stretch=1)
+                res_layout.addWidget(note_label, alignment=Qt.AlignRight)
 
                 ue_layout.addLayout(res_layout)
 
@@ -113,9 +117,13 @@ class ModernNotesApp(QWidget):
             saes = details.get("saes", {})
             for sae, sae_details in saes.items():
                 sae_layout = QHBoxLayout()
+                sae_layout.setSpacing(15)
                 
                 titre = sae_details.get("titre", "No title")
                 sae_name = QLabel(f"{sae} - {titre}")
+                sae_name.setWordWrap(True)
+                sae_name.setMinimumWidth(200)
+                sae_name.setMaximumWidth(600)
                 sae_name.setStyleSheet(
                     """
                     color: #34495e;
@@ -134,9 +142,8 @@ class ModernNotesApp(QWidget):
                 """
                 )
 
-                sae_layout.addWidget(sae_name)
-                sae_layout.addStretch()
-                sae_layout.addWidget(sae_note_label)
+                sae_layout.addWidget(sae_name, stretch=1)
+                sae_layout.addWidget(sae_note_label, alignment=Qt.AlignRight)
 
                 ue_layout.addLayout(sae_layout)
 
