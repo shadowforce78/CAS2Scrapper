@@ -147,6 +147,7 @@ class ModernNotesApp(QWidget):
         super().__init__()
         self.data = notes
         self.ressources = self.data.get("relevé", {}).get("ressources", {})
+        self.saes = self.data.get("relevé", {}).get("saes", {})
         self.notes = self.data.get("relevé", {}).get("ues", {})
         self.initUI()
 
@@ -250,7 +251,9 @@ class ModernNotesApp(QWidget):
                 sae_layout = QHBoxLayout()
                 sae_layout.setSpacing(15)
                 
-                titre = sae_details.get("titre", "No title")
+                # Récupérer les détails de la SAE depuis le bon dictionnaire
+                sae_info = self.saes.get(sae, {})
+                titre = sae_info.get("titre", "Sans titre")
                 sae_name = QLabel(f"{sae} - {titre}")
                 sae_name.setWordWrap(True)
                 sae_name.setMinimumWidth(200)
