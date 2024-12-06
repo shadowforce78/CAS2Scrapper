@@ -123,11 +123,12 @@ class AbsencesWidget(QWidget):
                 date_label.setStyleSheet("font-weight: bold; color: #2c3e50;")
                 date_layout.addWidget(date_label)
                 
+                
                 for absence in relevant_absences:
                     absence_info = QLabel(
                         f"De {absence['debut']}h à {absence['fin']}h - "
                         f"Status: {absence['statut']} - "
-                        f"Justifié: {'Oui' if absence['justifie'] else 'Non'}"
+                        f"Justifié: {'Oui' if absence['justifie'] else 'Non'} - "
                         f"Enseignant: {absence['enseignant']}"
                     )
                     # Colorer en rouge pour absent, orange pour retard
